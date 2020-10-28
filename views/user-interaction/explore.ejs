@@ -1,0 +1,27 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+
+    <main>
+    <%- include('../includes/navigation.ejs') %>
+
+        <% for (let user of users) { %>
+            <% if (user._id.toString() !== loggedId) { %>
+            <div class="centered" style="border: 1px solid grey; border-radius: 50rem; margin: 2rem;">
+
+                    <h4>User Name: <%= user.name %></h4>
+                    <h4>Email: <%= user.email %></h4>
+    
+                    <form action="/add-friend" method="POST">
+                        <input type="hidden" name="friendId" value="<%= user._id %>">
+                        <button type="submit" class="btn btn-success" style="margin: 1rem;">Add as a friend</button>
+                    </form>
+                <% } %>
+            </div>
+        <% } %>
+    
+
+    </main>
+<%- include('../includes/end.ejs') %>

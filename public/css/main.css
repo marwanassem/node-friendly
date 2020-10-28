@@ -1,0 +1,37 @@
+.centered {
+    text-align: center;
+    margin: 0 auto;
+  }
+
+.post-form{
+    margin: 2rem;
+    border: 1px solid blue;
+    border-radius: 1rem;
+    padding: 2rem;
+    
+}
+
+.form__item {
+  width: 25px;
+}
+
+.btn{
+    padding: 2rem;
+}
+
+a {
+    color: white;
+}
+
+.image {
+    height: 20rem;
+  }
+  
+  .image img {
+    height: 100%;
+  }
+
+ .user-message--error {
+    color: black;
+    background-color: red;
+  }

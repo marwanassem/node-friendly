@@ -1,0 +1,46 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+
+    <main>
+    <%- include('../includes/navigation.ejs') %>
+    <% if (errorMessage) { %>
+        <div class="user-message--error"><%= errorMessage %></div>
+    <% } %>
+
+    <div class="centered">
+
+        <form action="/login" method="POST" class="post-form" novalidate>
+            <div class="form-group">
+                <label for="email">E-Mail</label>
+                <input 
+                    class="form-control centered" style="width: 25rem;"
+                    type="email" 
+                    name="email" 
+                    id="email" >
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input 
+                    class="form-control centered" style="width: 25rem;"
+                    type="password" 
+                    name="password" 
+                    id="password" >
+            </div>
+    
+            <button class="btn btn-success" type="submit">Login</button>
+
+            <div style="padding: 1rem;">
+
+                <a href="/signup">New to the Network? Signup Now!</a>
+            </div>
+    
+        </form>
+    </div>
+
+        
+    </main>
+<%- include('../includes/end.ejs') %>

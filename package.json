@@ -1,0 +1,28 @@
+{
+  "name": "friendly",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "connect-mongodb-session": "^2.4.1",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "express-validator": "^6.6.1",
+    "mongoose": "^5.10.9",
+    "multer": "^1.4.2",
+    "nodemailer": "^6.4.14",
+    "nodemailer-sendgrid-transport": "^0.2.0"
+  }
+}

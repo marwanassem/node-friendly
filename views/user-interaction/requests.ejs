@@ -1,0 +1,54 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+
+    <main>
+    <%- include('../includes/navigation.ejs') %>
+        <% if (!sentRequests.length) { %>
+            <h4>You have no ongoing sent requets</h4>
+
+        <% } else { %>
+            <% for (let request of sentRequests) { %>
+                <div class="centered">
+                    <h4>You sent a request to: <%= request.name %></h4>
+                    <form action="">
+                        <button class="btn btn-danger">Delete request</button>
+                    </form>
+                </div>
+                
+            <% } %>
+        <% } %>
+
+            <hr>    
+            <hr>
+
+            <% if (!pendingRequests.length) { %>
+                <h4>You do not have any new friend request.</h4>
+    
+            <% } else { %>
+                <h3>You have <%= pendingRequests.length %> Pending requests</h3>
+                <% for (let request of pendingRequests) { %>
+                    <div class="centered">
+                        <h4>You received a request from: <%= request.name %></h4>
+                        <div>
+                            <form method="POST" action="/handle-request?mode=accept" style="margin: 1rem;">
+                                <input type="hidden" value="<%= request.userId %>" name="userSentReq">
+                                <input type="hidden" value="<%= request._id %>" name="requestId">
+                                <button class="btn btn-success">Accept</button>
+                            </form>
+                            <form method="POST" action="/handle-request?mode=decline">
+                                <input type="hidden" value="<%= request.userId %>" name="userSentReq">
+                                <input type="hidden" value="<%= request._id %>" name="requestId">
+                                <button class="btn btn-danger">Decline</button>
+                            </form>
+                        </div>
+                    </div>
+                    <hr>
+                    
+                <% } %>
+        <% } %>
+
+    </main>
+<%- include('../includes/end.ejs') %>

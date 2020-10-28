@@ -1,0 +1,31 @@
+<%- include('../includes/head.ejs') %>
+
+<body>
+    <%- include('../includes/navigation.ejs') %>
+    <main>
+        <div class="centered">
+
+            <h3 style="margin: 1rem;"><a href="/add-post" >Add new Post</a></h3>
+            
+            <hr>
+
+            <% if (!posts.length) { %>
+                <h3>No posts available</h3>
+                
+            <% } else { %>
+                <% for (let post of posts) { %>
+                    <div style="border: 1px solid grey; border-radius: 50rem;">
+                        <input type="hidden" name="postId" value="<%= post._id %>">
+                        <h3><a href="/<%= post._id %>"><%= post.title %></a></h3>
+                        <h6>Posted by: <%= post.userId.email %></h6>
+                        <h6><%= post.createdAt %></h6>
+                        <small>Tap to view</small>
+                    </div>
+                <% } %>
+            <% } %>
+        </div>
+    </main>
+</body>
+
+
+<%- include('../includes/end.ejs') %>
