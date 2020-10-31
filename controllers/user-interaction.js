@@ -145,3 +145,42 @@ exports.handleRequest = (req, res, next) => {
             return next(err);
         });
 };
+
+exports.getProfile = (req, res, next) => {
+    const userId = req.user._id;
+    let friendsIds;
+    let friends = [];
+    User.findById(userId)
+        .then(user => {
+            if (!user) {
+                const error = new Error('User not found.');
+                return next(error);
+            }
+            return friendsIds = [...user.friends];
+        })
+        .then(result => {
+            for (i = 0; i < friendsIds.length; i++) {
+                 User.findById(friendsIds[i])
+                    .then(userDoc => {
+                        if (!userDoc){
+                            const error = new Error('User not found.');
+                            return next(error);
+                        }
+                        return friends.push({
+                            name: userDoc.name,
+                            email: userDoc.email
+                        });
+                    })
+                    .then(result => {
+                        return res.render('user-interaction/profile', {
+                            pageTitle: 'Profile',
+                            isAuthenticated: req.session.isLoggedIn,
+                            friends: friends
+                        });
+                    })
+            }
+        })
+        .catch(err => {
+            return next(err);
+        });
+};

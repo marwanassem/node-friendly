@@ -10,5 +10,6 @@ router.get('/explore', interactionController.exploreUsers);
 router.post('/add-friend', interactionController.addFriend);
 router.get('/requests', interactionController.getRequests);
 router.post('/handle-request', interactionController.handleRequest);
+router.get('/profile', interactionController.getProfile);
 
 module.exports = router;

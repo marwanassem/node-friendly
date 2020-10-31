@@ -66,6 +66,11 @@
 
         <% } else { %>
           <li class="nav-item active" style="float: right;">
+            <form action="/profile" method="GET">
+                <button class="btn btn-link" type="submit">Profile</button>
+            </form>
+        </li>
+          <li class="nav-item active" style="float: right;">
               <form action="/logout" method="POST">
                   <button class="btn btn-link" type="submit">Logout</button>
               </form>

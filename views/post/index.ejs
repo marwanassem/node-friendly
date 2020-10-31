@@ -16,7 +16,7 @@
                 <% for (let post of posts) { %>
                     <div style="border: 1px solid grey; border-radius: 50rem;">
                         <input type="hidden" name="postId" value="<%= post._id %>">
-                        <h3><a href="/<%= post._id %>"><%= post.title %></a></h3>
+                        <h3><a href="/posts/<%= post._id %>"><%= post.title %></a></h3>
                         <h6>Posted by: <%= post.userId.email %></h6>
                         <h6><%= post.createdAt %></h6>
                         <small>Tap to view</small>

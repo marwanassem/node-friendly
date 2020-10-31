@@ -1,6 +1,5 @@
 <%- include('../includes/head.ejs') %>
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/product.css">
 </head>
 
 <body>
@@ -11,11 +10,34 @@
         <div class="card centered" >
             <div class="card-body">
               <h5 class="card-title"><%= post.title %></h5>
+              <h6>Posted by: <%= user.name %></h6>
               <div class="image card-img-top">
                 <img src="/<%= post.imageUrl %>" alt=Image>
             </div>
-              <p class="card-text"><%= post.content %></p>
-              
+              <h5 class="card-text"><%= post.content %></h5>
+
+            <h6 style="color: darkred;">Comments Section:</h6>
+            <form method="POST" action="/add-comment" novalidate>
+              <input type="hidden" value="<%= post._id %>" name="postId">
+              <input type="text" name="comment">
+              <button type="submit" class="btn btn-success">Comment</button>
+            </form>
+            <hr>
+            <% if (!post.comments.length) { %>
+              <small>No available comments on this post.</small>
+            <% } else { %>
+              <% for (let comment of comments) { %>
+              <div style="border: 1px solid black; height: 150px; width: 300px;" class="centered" id="commentDiv">
+                    <h6><%= comment.userId.name %>  Said:   <%= comment.content %></h6>
+                    <small><%= comment.createdAt %></small>
+                    <form action="/<%= post._id %>/<%= comment._id %>" method="POST">
+                      <input type="hidden" value="<% comment._id %>" name="commentId">
+                      <button class="btn btn-danger" type="submit" >Delete Comment</button>
+                    </form>
+                  </div>
+                  <% } %>
+            <% } %>
+          
              <a href="/<%= post._id %>/edit-post?edit=true" class="btn btn-dark" style="color: white; margin: 1rem;">Edit Post</a>
 
               <form action="/delete-post" method="POST">
@@ -27,4 +49,5 @@
             </div>
           </div>
     </main>
+    <script src="/js/main.js"></script>
 <%- include('../includes/end.ejs') %>

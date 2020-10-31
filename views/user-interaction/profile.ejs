@@ -1,0 +1,30 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+
+    <main>
+    <%- include('../includes/navigation.ejs') %>
+       <div class="centered">
+           <h3>Your friend list (<%= friends.length %>)</h3>
+
+           <% if (!friends.length) { %>
+            <h4>You have no friends yet!</h4>
+            <h6>Explore to find your new friends at our Network!</h6>
+
+        <% } else { %>
+            <% for (let friend of friends) { %>
+                <ul>
+                    <li><%= friend.name %></li>
+                    <li><%= friend.email %></li>
+                </ul>
+                <hr>
+            <% } %>
+        <% } %>
+                
+
+       </div>
+
+    </main>
+<%- include('../includes/end.ejs') %>

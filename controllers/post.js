@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 const Post = require('../models/post');
 const User = require('../models/user');
+const Comment = require('../models/comment');
 const fileHelper = require('../utils/file');
-const { validationResult } = require('express-validator/check')
+const { validationResult } = require('express-validator/check');
+const post = require('../models/post');
 
 exports.getPosts = (req, res, next) => {
     Post.find().populate('userId')
@@ -79,17 +81,25 @@ exports.postAddPost = (req, res, next) => {
 
 exports.viewPost = (req, res, next) => {
     const postId = req.params.postId;
-    Post.findById(postId)
-        .then(post => {
-            if (!post) {
-                const error = new Error('No post found');
-                return next(error);
-            }
-            return res.render('post/post-detail', {
-                post: post,
-                pageTitle: 'Post detail',
-                isAuthenticated: req.session.isLoggedIn
-            });
+    let postComments
+    Comment.find({postId: postId}).populate('userId')
+        .then(comments => {
+            return postComments = [...comments];
+        }).then(result=> {
+            Post.findById(postId)
+                .then(post => {
+                    if (!post) {
+                        const error = new Error('No post found');
+                        return next(error);
+                    }
+                    return res.render('post/post-detail', {
+                        post: post,
+                        pageTitle: 'Post detail',
+                        isAuthenticated: req.session.isLoggedIn,
+                        comments: postComments,
+                        user: req.user
+                    });
+                })
         })
         .catch(err => {
             return next(err);
@@ -175,5 +185,102 @@ exports.postEditPost = (req, res, next) => {
         .catch(err => {
             console.log(err);
         })
+};
 
+exports.addComment = (req, res, next) => {
+    const userId = req.user._id;
+    const postId = req.body.postId;
+    const commentContent = req.body.comment;
+    let foundPost;
+   
+    Post.findById(postId)
+        .then(post => {
+            if (!post) {
+                const error = new Error('Post not found.')
+                return next(error);
+            }
+            const comment = new Comment({
+                content: commentContent,
+                postId: postId,
+                userId: userId
+            })
+            foundPost = post;
+            return comment.save();
+        })
+        .then(comment => {
+            foundPost.comments.push(comment._id);
+            return foundPost.save();
+        })
+        .then(result => {
+            return Comment.find({postId: postId}).populate('userId')
+        })
+        .then(comments => {
+            return res.render('post/post-detail', {
+                post: foundPost,
+                pageTitle: 'Post detail',
+                isAuthenticated: req.session.isLoggedIn,
+                comments: comments,
+                user: req.user
+            })
+        })
+        .catch(err => {
+            return next(err);
+        });
+};
+
+exports.deleteComment = (req, res, next) => {
+    // NEED TO FIX A BUG !!!!!
+    const postId = req.params.postId;
+    const commentId = req.params.commentId;
+    let commentsId;
+    let comments = [];
+    let post;
+    Comment.findById(commentId)
+        .then(comment => {
+            if (!comment){
+                return next(new Error('Comment not found'))
+            }
+            return Comment.deleteOne({_id: commentId, userId: req.user._id}); 
+        })
+        .then(() => {
+            console.log('Deleted.');
+            return Post.findById(postId)
+                .then(post => {
+                    if (!post) {
+                        const error = new Error('Post not found.');
+                        return next(error);
+                    }
+                    for (i = 0; i < post.comments.length; i++){
+                        if (post.comments[i]._id.toString() === commentId){
+                            index = i;
+                        }
+                    }
+                    post.comments.slice(index);
+                    return post.save();
+                })
+                .then(savedPost => {
+                     post = savedPost;
+                    let comments = [];
+                    commentsId = savedPost.comments;
+                    for (i = 0; i < commentsId.length; i++){
+                        Comment.findById(commentsId[i])
+                            .then(comment => {
+                                comments.push(comment);
+                            })
+                            return comments;
+                    }
+                })
+                .then(() => {
+                    return res.render('post/post-detail', {
+                        post: post,
+                        pageTitle: 'Post detail',
+                        isAuthenticated: req.session.isLoggedIn,
+                        comments: comments,
+                        user: req.user
+                    })
+                })
+        })
+        .catch(err => {
+            return next(err);
+        }); 
 };
